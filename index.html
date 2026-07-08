@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BALKAN AVTO — Rent a car · Slovenija | Online rezervacije</title>
+<meta name="description" content="Iznajmljivanje automobila u Sloveniji. Proveri dostupnost, izaberi vozilo i rezerviši online — brzo i bez skrivenih troškova."/>
+<meta property="og:title" content="BALKAN AVTO — Rent a car · Slovenija"/>
+<meta property="og:description" content="Online rezervacije vozila u Sloveniji. Proveri dostupnost i rezerviši za par minuta."/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"/>
+<style>
+  /* ============================================================
+     BALKAN AVTO — javni sajt za rezervacije
+     Dizajn: čist, poverljiv; grafit + tirkiz; cene u monospace.
+     Signature: plutajuća kartica za proveru dostupnosti nad hero.
+     ============================================================ */
+  :root{
+    --ink:#14181C; --ink-2:#39424B; --muted:#6B7580;
+    --line:#E6E9EE; --line-2:#F0F2F5; --bg:#FFFFFF; --soft:#F6F8FA;
+    --accent:#0F766E; --accent-2:#0B5C55; --accent-soft:#E6F2F0;
+    --amber:#C77A0A; --green:#16A34A; --green-soft:#E6F5EC; --red:#DC2626;
+    --radius:14px; --radius-sm:9px;
+    --shadow:0 1px 2px rgba(20,24,28,.05),0 4px 16px rgba(20,24,28,.06);
+    --shadow-lg:0 24px 60px rgba(20,24,28,.22);
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,"JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button,input,select,textarea{font-family:inherit}
+  ::selection{background:var(--accent-soft)}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+  @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+  /* ---------- Header ---------- */
+  header.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+  .navbar{display:flex;align-items:center;gap:18px;height:66px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:750;letter-spacing:.3px}
+  .logo .mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#16b3a3);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+  .logo small{display:block;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:-2px}
+  .navlinks{display:flex;gap:26px;margin-left:14px}
+  .navlinks a{font-size:14px;color:var(--ink-2);font-weight:550}
+  .navlinks a:hover{color:var(--accent)}
+  .nav-r{margin-left:auto;display:flex;align-items:center;gap:16px}
+  .nav-phone{font-family:var(--mono);font-size:13.5px;font-weight:600;color:var(--ink)}
+  .nav-phone span{color:var(--muted);font-weight:500}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:11px 18px;border-radius:var(--radius-sm);border:1px solid var(--line);background:#fff;color:var(--ink);font-size:14px;font-weight:600;cursor:pointer;transition:.14s}
+  .btn:hover{background:var(--soft)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:var(--accent-2)}
+  .btn.lg{padding:14px 24px;font-size:15px}
+  .btn.block{width:100%}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;background:radial-gradient(120% 120% at 80% -10%,#1c5a54 0%,#12262a 55%,#0d1417 100%);color:#fff;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:0;background:
+    repeating-linear-gradient(90deg,transparent 0 78px,rgba(255,255,255,.03) 78px 80px);
+    -webkit-mask:linear-gradient(180deg,#000 0,transparent 85%);mask:linear-gradient(180deg,#000 0,transparent 85%);pointer-events:none}
+  .hero-in{position:relative;padding:74px 0 132px;z-index:1}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#8fd6cd;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 12px;border-radius:20px}
+  .hero h1{font-size:clamp(30px,5vw,50px);line-height:1.08;margin:20px 0 14px;font-weight:780;letter-spacing:-1px;max-width:15ch}
+  .hero p.lead{font-size:clamp(15px,2.2vw,18px);color:#c8d3d1;max-width:52ch;margin:0}
+  .hero .trust{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px;font-size:13.5px;color:#a9beba}
+  .hero .trust b{color:#fff;font-family:var(--mono)}
+  .hero .trust .li{display:flex;align-items:center;gap:8px}
+  .hero .trust svg{width:16px;height:16px;color:#7fd0c6}
+
+  /* ---------- Search card (signature) ---------- */
+  .search-card{position:relative;z-index:5;margin:-84px auto 0;max-width:1000px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-lg);padding:20px}
+  .search-card h3{margin:0 0 14px;font-size:14px;font-weight:700;color:var(--ink)}
+  .search-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end}
+  .sf label{display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+  .sf input,.sf select{width:100%;padding:12px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:14.5px;background:#fff;color:var(--ink)}
+  .sf input:focus,.sf select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+  /* ---------- Sections ---------- */
+  section{padding:70px 0}
+  .sec-head{text-align:center;max-width:620px;margin:0 auto 40px}
+  .sec-head .kick{font-size:12.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+  .sec-head h2{font-size:clamp(24px,3.4vw,34px);margin:10px 0 8px;font-weight:760;letter-spacing:-.5px}
+  .sec-head p{color:var(--muted);margin:0;font-size:16px}
+
+  /* fleet */
+  .fleet-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+  .fleet-bar .info{font-size:14px;color:var(--muted)}
+  .fleet-bar .info b{color:var(--ink)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{padding:7px 14px;border-radius:20px;border:1px solid var(--line);background:#fff;font-size:13px;cursor:pointer;color:var(--ink-2);font-weight:550;transition:.12s}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .cars{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .car{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:.16s}
+  .car:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(20,24,28,.12)}
+  .car .thumb{height:132px;background:linear-gradient(135deg,#eef3f2,#e2ecea);display:grid;place-items:center;position:relative;border-bottom:1px solid var(--line)}
+  .car .thumb svg{width:96px;height:auto;color:#0f766e;opacity:.85}
+  .car .cat{position:absolute;top:12px;left:12px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;background:#fff;border:1px solid var(--line);color:var(--ink-2);padding:4px 10px;border-radius:20px}
+  .car .avail{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--green-soft);color:var(--green)}
+  .car .body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .car h4{margin:0;font-size:17px;font-weight:700}
+  .car .specs{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:13px;color:var(--muted)}
+  .car .specs .sp{display:flex;align-items:center;gap:6px}
+  .car .specs svg{width:15px;height:15px;color:var(--accent)}
+  .car .price-row{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;padding-top:8px;border-top:1px solid var(--line-2)}
+  .car .price{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.5px}
+  .car .price small{display:block;font-family:var(--sans);font-size:11.5px;color:var(--muted);font-weight:500}
+  .car .foot{padding:0 18px 18px}
+
+  .empty{grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);background:var(--soft);border:1px dashed var(--line);border-radius:var(--radius)}
+  .empty h4{color:var(--ink-2);margin:0 0 6px;font-size:17px}
+
+  /* benefits */
+  .benefits{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .ben-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .ben{display:flex;flex-direction:column;gap:8px}
+  .ben .ic{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+  .ben .ic svg{width:22px;height:22px}
+  .ben h4{margin:4px 0 0;font-size:16px}
+  .ben p{margin:0;font-size:14px;color:var(--muted)}
+
+  /* steps (real sequence -> numbered) */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:step}
+  .step{position:relative;padding:26px 22px;border:1px solid var(--line);border-radius:var(--radius);background:#fff}
+  .step .n{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:1px}
+  .step h4{margin:10px 0 6px;font-size:18px}
+  .step p{margin:0;color:var(--muted);font-size:14px}
+
+  /* contact / footer */
+  footer{background:var(--ink);color:#c3cbd2;padding:56px 0 30px;font-size:14px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:36px}
+  footer h5{color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:.7px;margin:0 0 14px}
+  footer a{color:#c3cbd2;display:block;margin-bottom:8px}
+  footer a:hover{color:#fff}
+  footer .logo{color:#fff;margin-bottom:12px}
+  footer .logo small{color:#8a949d}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:34px;padding-top:18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#8a949d;font-size:13px}
+
+  /* ---------- Modal ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(20,24,28,.5);display:none;align-items:flex-start;justify-content:center;z-index:100;padding:32px 16px;overflow:auto}
+  .overlay.open{display:flex}
+  .modal{background:#fff;border-radius:18px;box-shadow:var(--shadow-lg);width:100%;max-width:560px;animation:pop .16s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .m-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between}
+  .m-head h3{margin:0;font-size:19px;font-weight:740}
+  .m-head .car-sub{font-size:13px;color:var(--muted);margin-top:2px}
+  .m-body{padding:22px 24px}
+  .x{border:0;background:transparent;cursor:pointer;color:var(--muted);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:16px}
+  .x:hover{background:var(--soft);color:var(--ink)}
+  .field{margin-bottom:15px}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+  .field input,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:14.5px}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .fg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .summary{background:var(--accent-soft);border:1px solid #CDE7E3;border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:18px}
+  .summary .ln{display:flex;justify-content:space-between;padding:3px 0;font-size:14px}
+  .summary .ln .v{font-family:var(--mono)}
+  .summary .tot{border-top:1px dashed #A9D3CD;margin-top:8px;padding-top:9px;font-weight:700;font-size:16px}
+  .summary .note{font-size:12px;color:#3f766e;margin-top:8px}
+  .warn{display:none;background:#FBEFDD;border:1px solid #EBD3A6;color:#8a5510;border-radius:var(--radius-sm);padding:10px 13px;font-size:13px;margin-bottom:14px}
+  .warn.show{display:block}
+  .success{text-align:center;padding:8px 6px}
+  .success .ok{width:58px;height:58px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;margin:6px auto 14px}
+  .success .ok svg{width:30px;height:30px}
+  .success h3{margin:0 0 6px;font-size:21px}
+  .success p{color:var(--muted);margin:0 0 14px}
+  .success .ref{font-family:var(--mono);font-size:15px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px 14px;display:inline-block;font-weight:700}
+
+  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:11px;font-size:14px;opacity:0;transition:.22s;z-index:300;box-shadow:var(--shadow-lg);pointer-events:none}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast.err{background:var(--red)}
+
+  .cfg{background:#FFF7E6;border:1px solid #F0D89B;color:#8a5a00;font-size:13px;padding:9px 0}
+  .cfg .wrap{display:flex;gap:8px;align-items:center}
+  .cfg code{font-family:var(--mono);background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .cars,.ben-grid{grid-template-columns:repeat(2,1fr)}
+    .steps,.foot-grid{grid-template-columns:1fr}
+    .search-grid{grid-template-columns:1fr 1fr}
+    .navlinks{display:none}
+  }
+  @media (max-width:560px){
+    .cars,.ben-grid{grid-template-columns:1fr}
+    .search-grid{grid-template-columns:1fr}
+    .fg2{grid-template-columns:1fr}
+    .nav-phone{display:none}
+    .hero-in{padding:52px 0 120px}
+  }
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div id="cfg-host"></div>
+
+<header class="top">
+  <div class="wrap navbar">
+    <a href="#" class="logo"><span class="mark">BA</span><span>BALKAN AVTO<small>Rent a car · Slovenija</small></span></a>
+    <nav class="navlinks">
+      <a href="#vozila">Vozila</a>
+      <a href="#kako">Kako funkcioniše</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="nav-r">
+      <a class="nav-phone" href="tel:+38641737676"><span>☎</span> +386 41 737676</a>
+      <a href="#vozila" class="btn primary">Rezerviši</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding:0">
+  <div class="wrap hero-in">
+    <span class="eyebrow">✦ Iznajmljivanje vozila u Sloveniji</span>
+    <h1>Pravi automobil za svaki put.</h1>
+    <p class="lead">Proveri dostupnost, izaberi vozilo iz naše flote i rezerviši online za par minuta — bez skrivenih troškova i papirologije.</p>
+    <div class="trust">
+      <div class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Potvrda u roku od <b>24h</b></div>
+      <div class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/></svg> Puno kasko osiguranje</div>
+      <div class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Preuzimanje 7 dana u nedelji</div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH CARD -->
+<div class="wrap">
+  <div class="search-card" id="pretraga">
+    <h3>Proveri dostupnost</h3>
+    <div class="search-grid">
+      <div class="sf"><label for="s-od">Preuzimanje</label><input type="date" id="s-od"/></div>
+      <div class="sf"><label for="s-do">Vraćanje</label><input type="date" id="s-do"/></div>
+      <div class="sf"><label for="s-kat">Kategorija</label><select id="s-kat"><option value="all">Sve kategorije</option></select></div>
+      <div class="sf"><button class="btn primary lg block" id="s-btn">Prikaži vozila</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- FLEET -->
+<section id="vozila">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kick">Naša flota</div>
+      <h2>Izaberi svoje vozilo</h2>
+      <p>Održavana i osigurana vozila svih klasa — od ekonomičnih gradskih do premium i kombi vozila.</p>
+    </div>
+    <div class="fleet-bar">
+      <div class="info" id="fleet-info"></div>
+      <div class="chips" id="fleet-chips"></div>
+    </div>
+    <div class="cars" id="cars"></div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div class="wrap">
+    <div class="ben-grid">
+      <div class="ben"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/></svg></div><h4>Sve osigurano</h4><p>Kasko i obavezno osiguranje uključeni u cenu, bez skrivenih doplata.</p></div>
+      <div class="ben"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h4>Brza potvrda</h4><p>Rezervišeš online, mi potvrđujemo termin i pripremamo vozilo za tebe.</p></div>
+      <div class="ben"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 13l2-5a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 8l2 5M5 13h14v5H5z"/><circle cx="7.5" cy="15.5" r="1.2"/><circle cx="16.5" cy="15.5" r="1.2"/></svg></div><h4>Čist vozni park</h4><p>Redovno servisirana i tehnički ispravna vozila novije generacije.</p></div>
+      <div class="ben"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h4>Podrška uvek</h4><p>Tu smo pre, tokom i posle najma — pozovi nas u svakom trenutku.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section id="kako">
+  <div class="wrap">
+    <div class="sec-head"><div class="kick">Jednostavno</div><h2>Kako funkcioniše</h2><p>Tri koraka od pretrage do ključeva u ruci.</p></div>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h4>Proveri dostupnost</h4><p>Unesi datume preuzimanja i vraćanja i pogledaj koja su vozila slobodna.</p></div>
+      <div class="step"><div class="n">02</div><h4>Rezerviši online</h4><p>Izaberi vozilo, ostavi kontakt podatke i pošalji zahtev — bez obaveze plaćanja unapred.</p></div>
+      <div class="step"><div class="n">03</div><h4>Preuzmi vozilo</h4><p>Potvrđujemo termin, a ti dolaziš po vozilo na dogovoreno mesto i vreme.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / FOOTER -->
+<footer id="kontakt">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#"><span class="mark">BA</span><span>BALKAN AVTO<small>Rent a car · Slovenija</small></span></a>
+        <p style="max-width:38ch;color:#a9b2ba">Pouzdano iznajmljivanje vozila u Sloveniji. Postavi zahtev online, mi se javljamo sa potvrdom.</p>
+      </div>
+      <div>
+        <h5>Kontakt</h5>
+        <a href="tel:+38641737676">☎ +386 41 737676</a>
+        <a href="mailto:office@balkanavto.si">✉ office@balkanavto.si</a>
+        <a href="#">📍 Slovenska vas, Slovenija</a>
+      </div>
+      <div>
+        <h5>Radno vreme</h5>
+        <a href="#" style="cursor:default">Pon–Pet: 08–18h</a>
+        <a href="#" style="cursor:default">Subota: 09–14h</a>
+        <a href="#" style="cursor:default">Nedelja: po dogovoru</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> BALKAN AVTO d.o.o. — Sva prava zadržana.</span>
+      <span>Online rezervacije</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"><div id="modal-host"></div></div>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* =====================================================================
+   BALKAN AVTO — javni sajt za rezervacije
+   Deli bazu sa admin aplikacijom. Supabase (anon + RPC) ili localStorage.
+   ===================================================================== */
+
+/* ---- 1) KONFIGURACIJA (isti projekat kao admin app) ---- */
+const SUPABASE_URL      = 'https://rxidisheqhpoybpgevrk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aWRpc2hlcWhwb3licGdldnJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1MDMxMzUsImV4cCI6MjA5OTA3OTEzNX0.Amkvf7e1xmjM0U-0kBR9P4-XuvL9zVQoDjG00XJVhPk';
+const USE_SUPABASE = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+/* ---- 2) HELPERI ---- */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'id-'+Date.now()+'-'+Math.random().toString(16).slice(2);
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function fmtEUR(n){return Number(n||0).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.slice(0,10).split('-');return `${d}.${m}.${y}`}
+function addDaysISO(iso,n){const d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+function daysBetween(od,doo){if(!od||!doo)return 1;const a=new Date(od+'T00:00:00'),b=new Date(doo+'T00:00:00');return Math.max(1,Math.round((b-a)/86400000))}
+let toastT=null;
+function toast(m,err=false){const t=$('#toast');t.textContent=m;t.className='show'+(err?' err':'');clearTimeout(toastT);toastT=setTimeout(()=>t.className='',2800)}
+
+/* ---- 3) BACKEND (Supabase / Local) ---- */
+const LS_KEY='balkanavto_rentacar_v1'; // isti kao admin app -> demo interop u istom browseru
+
+const LocalBackend={
+  _load(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{}}catch(e){return{}}},
+  _save(db){localStorage.setItem(LS_KEY,JSON.stringify(db))},
+  async listVozila(){return (this._load().vozila||[]).filter(v=>v.status==='aktivno')},
+  async listDostupnost(){return (this._load().rezervacije||[]).filter(r=>r.status!=='otkazano')
+    .map(r=>({vozilo_id:r.vozilo_id,datum_od:r.datum_od,datum_do:r.datum_do}))},
+  async kreiraj(p){
+    const db=this._load(); db.vozila=db.vozila||[]; db.rezervacije=db.rezervacije||[];
+    const v=db.vozila.find(x=>x.id===p.vozilo_id && x.status==='aktivno');
+    if(!v) throw new Error('Vozilo nije dostupno');
+    const conflict=db.rezervacije.some(r=>r.vozilo_id===p.vozilo_id && r.status!=='otkazano' && p.datum_od<r.datum_do && r.datum_od<p.datum_do);
+    if(conflict) throw new Error('Vozilo je zauzeto u izabranom periodu');
+    const row={id:uid(),vozilo_id:p.vozilo_id,klijent:p.klijent.trim(),telefon:p.telefon||'',email:p.email||'',
+      dokument:'',datum_od:p.datum_od,datum_do:p.datum_do,cena_dan:v.cena_dan,popust:0,stavke:[],
+      status:'rezervisano',placanje:'neplaceno',napomena:p.napomena||'',created_at:new Date().toISOString()};
+    db.rezervacije.push(row); this._save(db); return row.id;
+  }
+};
+
+const SupabaseBackend={
+  client:null,
+  _c(){if(!this.client)this.client=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);return this.client},
+  async listVozila(){const{data,error}=await this._c().from('vozila').select('*').eq('status','aktivno').order('marka');
+    if(error)throw error;return data||[]},
+  async listDostupnost(){const{data,error}=await this._c().from('dostupnost').select('*');
+    if(error)throw error;return data||[]},
+  async kreiraj(p){const{data,error}=await this._c().rpc('kreiraj_rezervaciju',{
+      p_vozilo:p.vozilo_id,p_klijent:p.klijent,p_telefon:p.telefon||null,p_email:p.email||null,
+      p_od:p.datum_od,p_do:p.datum_do,p_napomena:p.napomena||null});
+    if(error)throw error;return data}
+};
+
+const Backend=USE_SUPABASE?SupabaseBackend:LocalBackend;
+
+/* ---- 4) STORE ---- */
+const Store={vozila:[],dostupnost:[],
+  async load(){this.vozila=await Backend.listVozila();this.dostupnost=await Backend.listDostupnost()},
+  vozilo(id){return this.vozila.find(v=>v.id===id)}
+};
+
+/* ---- 5) STANJE ---- */
+const State={od:'',doo:'',kat:'all'};
+
+/* ---- 6) SPEC IKONE ---- */
+const carSVG=`<svg viewBox="0 0 120 60" fill="none"><path d="M12 42l6-16a8 8 0 0 1 7.4-5.2h48A8 8 0 0 1 81 26l8 16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="8" y="40" width="98" height="12" rx="4" fill="currentColor" opacity=".15"/><path d="M8 42h100" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="50" r="7" fill="currentColor"/><circle cx="86" cy="50" r="7" fill="currentColor"/></svg>`;
+const ic={
+  fuel:'<path d="M14 20V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v15M3 20h12M16 8l3 3v6a2 2 0 0 0 2-2V9l-3-3"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  cal:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',
+  cog:'<circle cx="12" cy="12" r="9"/><path d="M8 15V9l8 6V9"/>'
+};
+const spIcon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic[n]}</svg>`;
+
+/* ---- 7) DOSTUPNOST + RENDER FLOTE ---- */
+function availableCars(){
+  let cars=Store.vozila.slice();
+  if(State.kat!=='all') cars=cars.filter(v=>v.kategorija===State.kat);
+  if(State.od && State.doo){
+    cars=cars.filter(v=>!Store.dostupnost.some(d=>d.vozilo_id===v.id && State.od<d.datum_do && d.datum_od<State.doo));
+  }
+  return cars.sort((a,b)=>(a.cena_dan||0)-(b.cena_dan||0));
+}
+function renderChips(){
+  const kats=['all',...Array.from(new Set(Store.vozila.map(v=>v.kategorija).filter(Boolean)))];
+  $('#fleet-chips').innerHTML=kats.map(k=>`<button class="chip ${State.kat===k?'active':''}" data-k="${esc(k)}">${k==='all'?'Sve':esc(k)}</button>`).join('');
+  $$('#fleet-chips .chip').forEach(c=>c.onclick=()=>{State.kat=c.dataset.k;renderFleet()});
+  // popuni select u pretrazi
+  const sel=$('#s-kat');
+  if(sel && sel.options.length<=1){
+    kats.filter(k=>k!=='all').forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o)});
+  }
+}
+function renderFleet(){
+  renderChips();
+  const cars=availableCars();
+  const period=(State.od&&State.doo)?` za period <b>${fmtDate(State.od)} – ${fmtDate(State.doo)}</b>`:'';
+  $('#fleet-info').innerHTML = cars.length
+    ? `Prikazano <b>${cars.length}</b> ${cars.length===1?'vozilo':'vozila'}${period}.`
+    : `Nema slobodnih vozila${period}.`;
+  const host=$('#cars');
+  if(!cars.length){ host.innerHTML=`<div class="empty"><h4>Nema dostupnih vozila</h4><p>Pokušaj sa drugim datumima ili kategorijom.</p></div>`; return; }
+  host.innerHTML=cars.map(v=>{
+    const specs=[
+      v.godiste?`<span class="sp">${spIcon('cal')}${esc(v.godiste)}</span>`:'',
+      v.gorivo?`<span class="sp">${spIcon('fuel')}${esc(v.gorivo)}</span>`:'',
+      v.menjac?`<span class="sp">${spIcon('cog')}${esc(v.menjac)}</span>`:''
+    ].filter(Boolean).join('');
+    return `<article class="car">
+      <div class="thumb">${carSVG}
+        <span class="cat">${esc(v.kategorija||'Vozilo')}</span>
+        <span class="avail">Dostupno</span>
+      </div>
+      <div class="body">
+        <h4>${esc(v.marka)} ${esc(v.model)}</h4>
+        <div class="specs">${specs||'<span class="sp">Klimatizovano</span>'}</div>
+        <div class="price-row">
+          <div class="price">${fmtEUR(v.cena_dan)}<small>po danu${v.cena_nedelja?` · ${fmtEUR(v.cena_nedelja)}/ned`:''}</small></div>
+        </div>
+      </div>
+      <div class="foot"><button class="btn primary block" data-book="${v.id}">Rezerviši</button></div>
+    </article>`;
+  }).join('');
+  $$('#cars [data-book]').forEach(b=>b.onclick=()=>openBooking(b.dataset.book));
+}
+
+/* ---- 8) MODAL: REZERVACIJA ---- */
+function openModal(html){$('#modal-host').innerHTML=`<div class="modal">${html}</div>`;$('#overlay').classList.add('open');
+  const f=$('#modal-host input,#modal-host select');if(f)setTimeout(()=>f.focus(),60)}
+function closeModal(){$('#overlay').classList.remove('open');$('#modal-host').innerHTML=''}
+
+function openBooking(vid){
+  const v=Store.vozilo(vid); if(!v)return;
+  const od=State.od||todayISO();
+  const doo=State.doo||addDaysISO(od,3);
+  openModal(`
+    <div class="m-head">
+      <div><h3>Rezervacija</h3><div class="car-sub">${esc(v.marka)} ${esc(v.model)} · ${esc(v.kategorija||'')} · ${fmtEUR(v.cena_dan)}/dan</div></div>
+      <button class="x" data-close aria-label="Zatvori">✕</button>
+    </div>
+    <div class="m-body" id="m-body">
+      <div class="fg2">
+        <div class="field"><label>Datum preuzimanja</label><input type="date" id="b-od" value="${od}"/></div>
+        <div class="field"><label>Datum vraćanja</label><input type="date" id="b-do" value="${doo}"/></div>
+      </div>
+      <div class="warn" id="b-warn"></div>
+      <div class="summary" id="b-sum"></div>
+      <div class="field"><label>Ime i prezime *</label><input id="b-ime" placeholder="npr. Marko Kovač"/></div>
+      <div class="fg2">
+        <div class="field"><label>Telefon *</label><input id="b-tel" placeholder="+386 ..."/></div>
+        <div class="field"><label>E-mail</label><input id="b-mail" type="email" placeholder="ime@primer.si"/></div>
+      </div>
+      <div class="field"><label>Napomena (opciono)</label><textarea id="b-nap" rows="2" placeholder="Mesto preuzimanja, dodatni zahtevi…"></textarea></div>
+      <button class="btn primary block lg" id="b-send">Pošalji zahtev za rezervaciju</button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin:12px 0 0">Zahtev nije obavezujuće plaćanje. Javljamo se sa potvrdom termina.</p>
+    </div>`);
+  $$('#modal-host [data-close]').forEach(b=>b.onclick=closeModal);
+
+  function recalc(){
+    const o=$('#b-od').value, d=$('#b-do').value;
+    const w=$('#b-warn'); const sum=$('#b-sum'); const send=$('#b-send');
+    let valid=true;
+    if(!o||!d||d<o){ w.textContent='⚠ Datum vraćanja mora biti isti ili posle preuzimanja.'; w.classList.add('show'); valid=false; }
+    else{
+      const conflict=Store.dostupnost.some(x=>x.vozilo_id===vid && o<x.datum_do && x.datum_od<d);
+      if(conflict){ w.textContent='⚠ Vozilo je zauzeto u izabranom periodu. Izaberi druge datume.'; w.classList.add('show'); valid=false; }
+      else w.classList.remove('show');
+    }
+    const dana=daysBetween(o,d);
+    const ukupno=dana*Number(v.cena_dan||0);
+    sum.innerHTML=`
+      <div class="ln"><span>Vozilo</span><span class="v">${esc(v.marka)} ${esc(v.model)}</span></div>
+      <div class="ln"><span>Period</span><span class="v">${o?fmtDate(o):'—'} → ${d?fmtDate(d):'—'}</span></div>
+      <div class="ln"><span>${dana} × ${fmtEUR(v.cena_dan)}/dan</span><span class="v">${fmtEUR(ukupno)}</span></div>
+      <div class="ln tot"><span>Procenjeno ukupno</span><span class="v">${fmtEUR(ukupno)}</span></div>
+      ${v.depozit?`<div class="note">+ povratni depozit ${fmtEUR(v.depozit)} pri preuzimanju</div>`:''}`;
+    send.disabled=!valid;
+  }
+  $('#b-od').oninput=recalc; $('#b-do').oninput=recalc; recalc();
+
+  $('#b-send').onclick=async ()=>{
+    const p={vozilo_id:vid, klijent:$('#b-ime').value.trim(), telefon:$('#b-tel').value.trim(),
+      email:$('#b-mail').value.trim(), datum_od:$('#b-od').value, datum_do:$('#b-do').value, napomena:$('#b-nap').value.trim()};
+    if(!p.klijent){toast('Unesi ime i prezime.',true);return}
+    if(!p.telefon){toast('Unesi broj telefona.',true);return}
+    if(!p.datum_od||!p.datum_do||p.datum_do<p.datum_od){toast('Proveri datume.',true);return}
+    const btn=$('#b-send'); btn.disabled=true; btn.textContent='Slanje…';
+    try{
+      const id=await Backend.kreiraj(p);
+      // osveži dostupnost lokalno da se odmah odrazi
+      Store.dostupnost.push({vozilo_id:vid,datum_od:p.datum_od,datum_do:p.datum_do});
+      const ref=String(id).replace(/-/g,'').slice(0,8).toUpperCase();
+      $('#m-body').innerHTML=`<div class="success">
+        <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h3>Zahtev je poslat!</h3>
+        <p>Hvala, ${esc(p.klijent.split(' ')[0])}. Javljamo se u najkraćem roku sa potvrdom termina za<br><b>${esc(v.marka)} ${esc(v.model)}</b> (${fmtDate(p.datum_od)} – ${fmtDate(p.datum_do)}).</p>
+        <div class="ref">Broj zahteva: ${ref}</div>
+        <div style="margin-top:18px"><button class="btn" data-close>Zatvori</button></div>
+      </div>`;
+      $$('#modal-host [data-close]').forEach(b=>b.onclick=()=>{closeModal();renderFleet()});
+      toast('Rezervacija poslata.');
+    }catch(e){
+      btn.disabled=false; btn.textContent='Pošalji zahtev za rezervaciju';
+      toast('Greška: '+(e.message||'pokušaj ponovo'),true);
+    }
+  };
+}
+
+/* ---- 9) PRETRAGA ---- */
+function wireSearch(){
+  const od=$('#s-od'), doo=$('#s-do');
+  od.min=todayISO(); doo.min=todayISO();
+  od.value=State.od; doo.value=State.doo;
+  $('#s-btn').onclick=()=>{
+    State.od=od.value; State.doo=doo.value; State.kat=$('#s-kat').value;
+    if(State.od && State.doo && State.doo<State.od){ toast('Datum vraćanja mora biti posle preuzimanja.',true); return; }
+    renderFleet();
+    document.getElementById('vozila').scrollIntoView({behavior:'smooth'});
+  };
+  od.onchange=()=>{ if(doo.value && doo.value<od.value) doo.value=addDaysISO(od.value,1); doo.min=od.value; };
+}
+
+/* ---- 10) INIT ---- */
+async function seedIfEmpty(){
+  if(USE_SUPABASE) return;
+  const db=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+  if(db.vozila && db.vozila.length) return;
+  db.vozila=[
+    {id:uid(),marka:'Renault',model:'Clio',registracija:'MB 78-GHI',godiste:2023,kategorija:'Ekonomična',gorivo:'Benzin',menjac:'Manuelni',status:'aktivno',cena_dan:30,cena_nedelja:180,cena_mesec:600,depozit:200,created_at:new Date().toISOString()},
+    {id:uid(),marka:'Volkswagen',model:'Golf',registracija:'LJ 45-DEF',godiste:2021,kategorija:'Kompakt',gorivo:'Benzin',menjac:'Manuelni',status:'aktivno',cena_dan:38,cena_nedelja:230,cena_mesec:760,depozit:250,created_at:new Date().toISOString()},
+    {id:uid(),marka:'Škoda',model:'Octavia',registracija:'LJ 12-ABC',godiste:2022,kategorija:'Limuzina',gorivo:'Dizel',menjac:'Manuelni',status:'aktivno',cena_dan:45,cena_nedelja:270,cena_mesec:900,depozit:300,created_at:new Date().toISOString()},
+    {id:uid(),marka:'Škoda',model:'Kodiaq',registracija:'LJ 90-JKL',godiste:2022,kategorija:'SUV',gorivo:'Dizel',menjac:'Automatik',status:'aktivno',cena_dan:70,cena_nedelja:420,cena_mesec:1500,depozit:500,created_at:new Date().toISOString()},
+    {id:uid(),marka:'BMW',model:'Serija 3',registracija:'LJ 21-PQR',godiste:2023,kategorija:'Premium',gorivo:'Dizel',menjac:'Automatik',status:'aktivno',cena_dan:95,cena_nedelja:560,cena_mesec:2000,depozit:800,created_at:new Date().toISOString()}
+  ];
+  db.rezervacije=db.rezervacije||[];
+  localStorage.setItem(LS_KEY,JSON.stringify(db));
+}
+async function init(){
+  $('#year').textContent=new Date().getFullYear();
+  if(!USE_SUPABASE){
+    $('#cfg-host').innerHTML=`<div class="cfg"><div class="wrap">⚠ Demo režim (localStorage). Za povezivanje sa bazom popuni <code>SUPABASE_URL</code> i <code>SUPABASE_ANON_KEY</code>.</div></div>`;
+  }
+  try{
+    await seedIfEmpty();
+    await Store.load();
+  }catch(e){
+    $('#cars').innerHTML=`<div class="empty"><h4>Trenutno ne možemo učitati vozila</h4><p>${esc(e.message)}</p></div>`;
+    wireSearch(); return;
+  }
+  wireSearch();
+  renderFleet();
+  $('#overlay').onclick=e=>{if(e.target.id==='overlay')closeModal()};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+}
+init();
+</script>
+</body>
+</html>
